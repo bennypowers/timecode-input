@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>timecode-input demo</title>
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+    <link rel="import" href="../../paper-input/paper-input.html">
+    <link rel="import" href="../timecode-input.html">
+
+    <custom-style>
+      <style is="custom-style" include="demo-pages-shared-styles">
+      </style>
+    </custom-style>
+  </head>
+  <body>
+    <div class="vertical-section-container centered">
+      <h3>Basic timecode-input demo</h3>
+      <demo-snippet>
+        <template>
+          <dom-bind>
+            <template>
+              <timecode-input id="timecode"
+                  time="{{time}}"
+                  hours="{{hours}}"
+                  minutes="{{minutes}}"
+                  seconds="{{seconds}}"
+                  milliseconds="{{milliseconds}}"
+                  display-time="{{displayTime}}"
+              ></timecode-input>
+              <hr/>
+              <paper-input type="number" min="0" value="{{time}}" label="time"></paper-input>
+              <hr>
+              <span>[[displayTime]]</span>
+              <hr>
+              <span>[[hours]]</span>
+              <span>[[minutes]]</span>
+              <span>[[seconds]]</span>
+              <span>[[milliseconds]]</span>
+            </template>
+          </dom-bind>
+        </template>
+      </demo-snippet>
+    </div>
+  </body>
+</html>

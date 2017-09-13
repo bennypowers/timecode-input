@@ -1,0 +1,128 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-input/iron-input.html">
+
+<dom-module id="unit-input">
+  <template>
+
+    <style>
+      :host {
+        @apply --unit-input;
+      }
+
+      input {
+        border: none;
+        max-width: var(--unit-input-input-width, 1.5em);
+        -moz-appearance: textfield;
+        @apply --unit-input-input;
+      }
+
+      input[type="number"]::-webkit-outer-spin-button,
+      input[type="number"]::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+      }
+    </style>
+
+    <iron-input bind-value="{{unitValue}}">
+      <input id$="[[unit]]"
+          name$="[[unit]]"
+          type="number"
+          min="0"
+          max="{{max}}"
+          maxlength="{{maxlength}}"
+          value="{{value::input}}">
+    </iron-input>
+
+  </template>
+
+  <script>
+    /**
+     * `milliseconds-input`
+     * An element to display and edit timecodes for audio/visual applications
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class UnitInput extends Polymer.Element {
+      static get is() {return 'unit-input';}
+      static get properties() {
+        return {
+
+          baseValue: {
+            type: Number,
+            value: 0,
+            notify: true,
+            computed: '_computeBaseValue(value, time, factor)',
+          },
+
+          max: {
+            type: Number,
+            value: 999,
+            computed: '_computeMax(unit)',
+          },
+
+          factor: {
+            type: Number,
+            computed: '_computeFactor(unit)',
+            value: 0,
+          },
+
+          time: {
+            type: Number,
+            value: 0,
+          },
+
+          unitValue: {
+            type: Number,
+            value: 0,
+          },
+
+          unit: {
+            type: String,
+          },
+
+          maxlength: {
+            type: Number,
+            value: 2,
+          },
+
+          value: {
+            type: Number,
+            observer: '_valueChanged',
+          },
+
+        };
+      }
+
+      _computeBaseValue(value, time, factor) {
+        const unitValue = value * factor;
+        return parseInt(unitValue) || 0;
+      }
+
+      _computeMax(unit) {
+        switch (unit) {
+          case 'milliseconds': return 999;
+          case 'seconds':
+          case 'minutes': return 60;
+          case 'hours': return 99999999;
+        }
+      }
+
+      _computeFactor(unit) {
+        switch (unit) {
+          case 'milliseconds': return 1;
+          case 'seconds': return 1000;
+          case 'minutes': return 1000 * 60;
+          case 'hours': return 1000 * 60 * 60;
+        }
+      }
+
+      _valueChanged(value) {
+        this.unitValue = parseInt(value);
+      }
+    }
+
+    window.customElements.define(UnitInput.is, UnitInput);
+  </script>
+</dom-module>

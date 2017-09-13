@@ -1,0 +1,160 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-a11y-keys/iron-a11y-keys.html">
+<link rel="import" href="moment-script.html">
+<link rel="import" href="unit-input.html">
+
+<dom-module id="timecode-input">
+  <template>
+    <style>
+
+      #hours,
+      #minutes,
+      #seconds {
+      }
+
+      #milliseconds {
+        --unit-input-input-width: 1.85em;
+      }
+    </style>
+
+    <unit-input id="hours" unit="hours" unit-value="{{hours}}" base-value="{{hoursAsMilliseconds}}"></unit-input>
+
+    <span class="colon">:</span>
+
+    <unit-input id="minutes" unit="minutes" unit-value="{{minutes}}" base-value="{{minutesAsMilliseconds}}"></unit-input>
+
+    <span class="colon">:</span>
+
+    <unit-input id="seconds" unit="seconds" unit-value="{{seconds}}" base-value="{{secondsAsMilliseconds}}"></unit-input>
+
+    <span class="colon">:</span>
+
+    <unit-input id="milliseconds" unit="milliseconds" unit-value="{{milliseconds}}" base-value="{{millisecondsAsMilliseconds}}" maxlength="2"></unit-input>
+
+  </template>
+
+  <script>
+    /**
+     * `timecode-input`
+     * An element to display and edit timecodes for audio/visual applications
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class TimecodeInput extends Polymer.Element {
+      static get is() {return 'timecode-input';}
+      static get properties() {
+        return {
+
+          hours: {
+            type: Number,
+            value: 0,
+            notify: true,
+          },
+
+          minutes: {
+            type: Number,
+            value: 0,
+            notify: true,
+          },
+
+          seconds: {
+            type: Number,
+            value: 0,
+            notify: true,
+          },
+
+          milliseconds: {
+            type: Number,
+            value: 0,
+            notify: true,
+          },
+
+          hoursAsMilliseconds: {
+            type: Number,
+            value: 0,
+            notify: true,
+            observer: '_hoursAsMillisecondsChanged',
+          },
+
+          minutesAsMilliseconds: {
+            type: Number,
+            value: 0,
+            notify: true,
+            observer: '_minutesAsMillisecondsChanged',
+          },
+
+          secondsAsMilliseconds: {
+            type: Number,
+            value: 0,
+            notify: true,
+            observer: '_secondsAsMillisecondsChanged',
+          },
+
+          millisecondsAsMilliseconds: {
+            type: Number,
+            value: 0,
+            notify: true,
+            observer: '_millisecondsAsMillisecondsChanged',
+          },
+
+          displayTime: {
+            type: Number,
+            computed: '_computeDisplayTime(time)',
+            observer: '_displayTimeChanged',
+            notify: true,
+          },
+
+          time: {
+            type: Number,
+            value: 0,
+            notify: true,
+          },
+
+        };
+      }
+
+      _computeDisplayTime(time) {
+        return moment('1900-01-01 00:00:00')
+          .add(time).format('HH:mm:ss:SSS');
+      }
+
+      _millisecondsAsMillisecondsChanged(milliseconds) {
+        this.time -= this.time % 1000;
+        this.time += milliseconds;
+      }
+
+      _secondsAsMillisecondsChanged(seconds) {
+        this.time -= this.time % (60 * 1000);
+        this.time += seconds +
+          this.millisecondsAsMilliseconds;
+      }
+
+      _minutesAsMillisecondsChanged(minutes) {
+        this.time -= this.time % (60 * 60 * 1000);
+        this.time += minutes +
+          this.secondsAsMilliseconds +
+          this.millisecondsAsMilliseconds;
+      }
+
+      _hoursAsMillisecondsChanged(hours) {
+        this.time -= this.time % (60 * 60 * 60 * 1000);
+        this.time += hours +
+          this.minutesAsMilliseconds +
+          this.secondsAsMilliseconds +
+          this.millisecondsAsMilliseconds;
+      }
+
+      _displayTimeChanged(displayTime) {
+        const parts = displayTime.split(':');
+        this.hours = parseInt(parts[0]);
+        this.minutes = parseInt(parts[1]);
+        this.seconds = parseInt(parts[2]);
+        this.milliseconds = parseInt(parts[3]);
+      }
+    }
+
+    window.customElements.define(TimecodeInput.is, TimecodeInput);
+  </script>
+</dom-module>
