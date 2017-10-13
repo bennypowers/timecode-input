@@ -12,6 +12,7 @@
     <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
     <link rel="import" href="../../paper-input/paper-input.html">
     <link rel="import" href="../timecode-input.html">
+    <link rel="import" href="../paper-timecode-input.html">
 
     <custom-style>
       <style is="custom-style" include="demo-pages-shared-styles">
@@ -25,6 +26,7 @@
         <template>
           <dom-bind>
             <template>
+              <paper-checkbox id="checkbox" checked="{{useFrames}}">Use Frames</paper-checkbox>
               <timecode-input id="timecode"
                   time="{{time}}"
                   hours="{{hours}}"
@@ -32,6 +34,7 @@
                   seconds="{{seconds}}"
                   milliseconds="{{milliseconds}}"
                   display-time="{{displayTime}}"
+                  use-frames="{{useFrames}}"
               ></timecode-input>
               <hr/>
               <paper-input type="number" min="0" value="{{time}}" label="time"></paper-input>
@@ -47,5 +50,35 @@
         </template>
       </demo-snippet>
     </div>
+
+    <!-- <div class="vertical-section-container centered">
+      <h3>paper-timecode-input demo</h3>
+      <demo-snippet>
+        <template>
+          <dom-bind>
+            <template>
+              <paper-timecode-input id="paper"
+                  label="Timecode"
+                  time="{{time}}"
+                  hours="{{hours}}"
+                  minutes="{{minutes}}"
+                  seconds="{{seconds}}"
+                  milliseconds="{{milliseconds}}"
+                  display-time="{{displayTime}}"
+              ></paper-timecode-input>
+              <hr/>
+              <paper-input type="number" min="0" value="{{time}}" label="time"></paper-input>
+              <hr>
+              <span>[[displayTime]]</span>
+              <hr>
+              <span>[[hours]]</span>
+              <span>[[minutes]]</span>
+              <span>[[seconds]]</span>
+              <span>[[milliseconds]]</span>
+            </template>
+          </dom-bind>
+        </template>
+      </demo-snippet>
+    </div> -->
   </body>
 </html>

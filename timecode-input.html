@@ -7,6 +7,10 @@
   <template>
     <style>
 
+      input {
+        @apply --timecode-input;
+      }
+
       #hours,
       #minutes,
       #seconds {
@@ -15,21 +19,58 @@
       #milliseconds {
         --unit-input-input-width: 1.85em;
       }
+
+      .container {
+        @apply --layout-horizontal;
+      }
+
     </style>
 
-    <unit-input id="hours" unit="hours" unit-value="{{hours}}" base-value="{{hoursAsMilliseconds}}"></unit-input>
+    <div class="container">
 
-    <span class="colon">:</span>
+      <unit-input id="hours"
+          unit="hours"
+          unit-value="{{hours}}"
+          base-value="{{hoursAsMilliseconds}}"
+      ></unit-input>
 
-    <unit-input id="minutes" unit="minutes" unit-value="{{minutes}}" base-value="{{minutesAsMilliseconds}}"></unit-input>
+      <span class="separator">:</span>
 
-    <span class="colon">:</span>
+      <unit-input id="minutes"
+          unit="minutes"
+          unit-value="{{minutes}}"
+          base-value="{{minutesAsMilliseconds}}"
+      ></unit-input>
 
-    <unit-input id="seconds" unit="seconds" unit-value="{{seconds}}" base-value="{{secondsAsMilliseconds}}"></unit-input>
+      <span class="separator">:</span>
 
-    <span class="colon">:</span>
+      <unit-input id="seconds"
+          unit="seconds"
+          unit-value="{{seconds}}"
+          base-value="{{secondsAsMilliseconds}}"
+      ></unit-input>
 
-    <unit-input id="milliseconds" unit="milliseconds" unit-value="{{milliseconds}}" base-value="{{millisecondsAsMilliseconds}}" maxlength="2"></unit-input>
+      <span class="separator" hidden$="[[useFrames]]">:</span>
+      <span class="separator" hidden$="[[!useFrames]]">:</span>
+
+      <unit-input id="milliseconds"
+          hidden$="[[useFrames]]"
+          disabled$="[[useFrames]]"
+          unit="milliseconds"
+          unit-value="{{milliseconds}}"
+          base-value="{{millisecondsAsMilliseconds}}"
+          maxlength="3"
+      ></unit-input>
+
+      <unit-input id="frames"
+          hidden$="[[!useFrames]]"
+          disabled$="[[!useFrames]]"
+          unit="frames"
+          unit-value="{{frame}}"
+          base-value="{{frameAsMilliseconds}}"
+      ></unit-input>
+
+    </div>
 
   </template>
 
@@ -71,6 +112,32 @@
             notify: true,
           },
 
+          /**
+           * The current frame, relative to the current second.
+           */
+          frame: {
+            type: Number,
+            value: 0,
+          },
+
+          /**
+           * Frames per second of the media source, for calculating
+           * the current frame.
+           */
+          fps: {
+            type: Number,
+            value: null,
+          },
+
+          /**
+           * Whether or not to display frames instead of milliseconds in the
+           * rightmost input field.
+           */
+          useFrames: {
+            type: Boolean,
+            value: false,
+          },
+
           hoursAsMilliseconds: {
             type: Number,
             value: 0,
@@ -99,6 +166,13 @@
             observer: '_millisecondsAsMillisecondsChanged',
           },
 
+          frameAsMilliseconds: {
+            type: Number,
+            value: 0,
+            notify: true,
+            observer: '_frameAsMillisecondsChanged',
+          },
+
           displayTime: {
             type: Number,
             computed: '_computeDisplayTime(time)',
@@ -117,7 +191,13 @@
 
       _computeDisplayTime(time) {
         return moment('1900-01-01 00:00:00')
-          .add(time).format('HH:mm:ss:SSS');
+          .add(time)
+          .format('HH:mm:ss:SSS');
+      }
+
+      _frameAsMillisecondsChanged(frame) {
+        // this.time -= this.time % 1000;
+        // this.time += milliseconds;
       }
 
       _millisecondsAsMillisecondsChanged(milliseconds) {
