@@ -29,6 +29,7 @@
     <div class="container">
 
       <unit-input id="hours"
+          disabled="[[disabled]]"
           unit="hours"
           unit-value="{{hours}}"
           base-value="{{hoursAsMilliseconds}}"
@@ -37,6 +38,7 @@
       <span class="separator">:</span>
 
       <unit-input id="minutes"
+          disabled="[[disabled]]"
           unit="minutes"
           unit-value="{{minutes}}"
           base-value="{{minutesAsMilliseconds}}"
@@ -45,6 +47,7 @@
       <span class="separator">:</span>
 
       <unit-input id="seconds"
+          disabled="[[disabled]]"
           unit="seconds"
           unit-value="{{seconds}}"
           base-value="{{secondsAsMilliseconds}}"
@@ -54,6 +57,7 @@
       <span class="separator" hidden$="[[!useFrames]]">:</span>
 
       <unit-input id="milliseconds"
+          disabled="[[disabled]]"
           hidden$="[[useFrames]]"
           disabled$="[[useFrames]]"
           unit="milliseconds"
@@ -63,6 +67,7 @@
       ></unit-input>
 
       <unit-input id="frames"
+          disabled="[[disabled]]"
           hidden$="[[!useFrames]]"
           disabled$="[[!useFrames]]"
           unit="frames"
@@ -111,6 +116,11 @@
             type: Number,
             value: 0,
             notify: true,
+          },
+
+          disabled: {
+            type: Boolean,
+            value: false,
           },
 
           /**

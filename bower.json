@@ -6,7 +6,8 @@
     "polymer": "Polymer/polymer#^2.0.0",
     "iron-input": "PolymerElements/iron-input#^2.0.1",
     "iron-a11y-keys": "PolymerElements/iron-a11y-keys#^2.0.0",
-    "moment": "^2.18.1"
+    "moment": "^2.18.1",
+    "number-input": "fooloomanzoo/number-input#^1.1.8"
   },
   "devDependencies": {
     "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^2.0.0",

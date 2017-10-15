@@ -1,5 +1,5 @@
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../iron-input/iron-input.html">
+<link rel="import" href="../number-input/number-input.html">
 
 <dom-module id="unit-input">
   <template>
@@ -9,7 +9,7 @@
         @apply --unit-input;
       }
 
-      input {
+      number-input {
         border: none;
         max-width: var(--unit-input-input-width, 1.5em);
         -moz-appearance: textfield;
@@ -23,7 +23,18 @@
       }
     </style>
 
-    <iron-input id="ironInput"
+    <number-input id="input"
+        disabled="[[disabled]]"
+        step="1"
+        saturate
+        max="[[max]]"
+        min="0"
+        pad-length="[[maxlength]]"
+        value="{{unitValue}}"
+    ></number-input>
+
+
+    <!-- <iron-input id="ironInput"
         bind-value="{{unitValue}}"
         allowed-pattern="[0-9]+"
         on-input="_handleInput">
@@ -34,7 +45,7 @@
           max="{{max}}"
           maxlength="{{maxlength}}"
           value="{{value::input}}">
-    </iron-input>
+    </iron-input> -->
 
   </template>
 
@@ -58,6 +69,8 @@
             notify: true,
             computed: '_computeBaseValue(value, time, factor)',
           },
+
+          disabled: Boolean,
 
           max: {
             type: Number,
