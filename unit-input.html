@@ -25,10 +25,11 @@
 
     <iron-input id="ironInput"
         bind-value="{{unitValue}}"
+        allowed-pattern="[0-9]+"
         on-input="_handleInput">
       <input id="input"
           name$="[[unit]]"
-          type="number"
+          type="text"
           min="0"
           max="{{max}}"
           maxlength="{{maxlength}}"
@@ -61,7 +62,7 @@
           max: {
             type: Number,
             value: 999,
-            computed: '_computeMax(unit)',
+            computed: '_computeMax(unit, fps)',
           },
 
           useFrames: {
@@ -75,7 +76,7 @@
 
           factor: {
             type: Number,
-            computed: '_computeFactor(unit)',
+            computed: '_computeFactor(unit, fps)',
             value: 0,
           },
 
@@ -111,8 +112,9 @@
         return parseInt(unitValue) || 0;
       }
 
-      _computeMax(unit) {
+      _computeMax(unit, fps) {
         switch (unit) {
+          case 'frames': return fps;
           case 'milliseconds': return 999;
           case 'seconds':
           case 'minutes': return 60;
@@ -120,8 +122,9 @@
         }
       }
 
-      _computeFactor(unit) {
+      _computeFactor(unit, fps) {
         switch (unit) {
+          case 'frames': return fps * 1000;
           case 'milliseconds': return 1;
           case 'seconds': return 1000;
           case 'minutes': return 1000 * 60;

@@ -7,7 +7,7 @@
   <template>
     <style>
 
-      input {
+      :host {
         @apply --timecode-input;
       }
 
@@ -66,6 +66,7 @@
           hidden$="[[!useFrames]]"
           disabled$="[[!useFrames]]"
           unit="frames"
+          fps="[[fps]]"
           unit-value="{{frame}}"
           base-value="{{frameAsMilliseconds}}"
       ></unit-input>
@@ -195,9 +196,9 @@
           .format('HH:mm:ss:SSS');
       }
 
-      _frameAsMillisecondsChanged(frame) {
-        // this.time -= this.time % 1000;
-        // this.time += milliseconds;
+      _frameAsMillisecondsChanged(frameAsMilliseconds) {
+        this.time -= this.time % (this.fps * 1000);
+        this.time += frameAsMilliseconds * (this.fps * 1000);
       }
 
       _millisecondsAsMillisecondsChanged(milliseconds) {
@@ -232,6 +233,7 @@
         this.minutes = parseInt(parts[1]);
         this.seconds = parseInt(parts[2]);
         this.milliseconds = parseInt(parts[3]);
+        this.frame = parseInt((this.time / 1000) * this.fps) % this.fps;
       }
     }
 
