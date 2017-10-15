@@ -4,7 +4,6 @@
   "main": "timecode-input.html",
   "dependencies": {
     "polymer": "Polymer/polymer#^2.0.0",
-    "iron-input": "PolymerElements/iron-input#^2.0.1",
     "iron-a11y-keys": "PolymerElements/iron-a11y-keys#^2.0.0",
     "moment": "^2.18.1",
     "number-input": "fooloomanzoo/number-input#^1.1.8"
